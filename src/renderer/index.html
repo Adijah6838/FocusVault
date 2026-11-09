@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FocusVault</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="sidebar">
+      <h1 class="logo">FocusVault</h1>
+      <nav>
+        <a href="#" class="nav-link active" data-target="dashboard">Dashboard</a>
+        <a href="#" class="nav-link" data-target="timer">Focus Timer</a>
+        <a href="#" class="nav-link" data-target="analytics">Analytics</a>
+        <a href="#" class="nav-link" data-target="history">Session History</a>
+        <a href="#" class="nav-link" data-target="settings">Settings</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <!-- DASHBOARD VIEW -->
+      <div id="view-dashboard" class="view active">
+        <header>
+          <h2>Dashboard</h2>
+          <p id="status-message" style="color: #a0a0a0; font-size: 14px; margin-top: 5px;">Connecting...</p>
+        </header>
+        <section class="stats-grid">
+          <div class="stat-card"><h3>Total Tasks</h3><p id="stat-total">0</p></div>
+          <div class="stat-card"><h3>Pending</h3><p id="stat-pending">0</p></div>
+          <div class="stat-card"><h3>In Progress</h3><p id="stat-inprogress">0</p></div>
+          <div class="stat-card"><h3>Completed</h3><p id="stat-completed">0</p></div>
+        </section>
+        <section class="task-section">
+          <h3>Create New Task</h3>
+          <form id="task-form">
+            <div class="form-group"><input type="text" id="task-title" placeholder="Task title..." required></div>
+            <div class="form-group"><input type="text" id="task-category" placeholder="Category (e.g., Work)" required></div>
+            <div class="form-group">
+              <select id="task-priority">
+                <option value="Low">Low Priority</option>
+                <option value="Medium" selected>Medium Priority</option>
+                <option value="High">High Priority</option>
+                <option value="Critical">Critical Priority</option>
+              </select>
+            </div>
+            <div class="form-group"><input type="date" id="task-deadline" required></div>
+            <button type="submit" class="btn-primary">Add Task</button>
+          </form>
+        </section>
+        <section class="task-section">
+          <h3>My Tasks</h3>
+          <div id="task-list" class="task-list"><p class="empty-state">No tasks yet. Create one above!</p></div>
+        </section>
+      </div>
+
+      <!-- TIMER VIEW -->
+      <div id="view-timer" class="view">
+        <header><h2>Focus Timer</h2></header>
+        <div class="timer-container">
+          <h3 id="timer-mode" style="color: var(--text-muted); margin-bottom: 10px;">Work Session</h3>
+          <select id="timer-task-select" style="padding: 10px; border-radius: 6px; background: var(--bg-main); color: white; border: 1px solid #4a4a55; margin-bottom: 20px; width: 300px; font-size: 16px;">
+            <option value="">General Focus (No Task)</option>
+          </select>
+          <div class="timer-display" id="timer-display">25:00</div>
+          <div class="timer-controls">
+            <button id="btn-start" class="btn-primary">Start</button>
+            <button id="btn-pause" class="btn-primary" style="display:none; background-color: #ff9800;">Pause</button>
+            <button id="btn-reset" class="btn-delete" style="background-color: #4a4a55;">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS VIEW -->
+      <div id="view-analytics" class="view">
+        <header><h2>Productivity Analytics</h2></header>
+        <div class="analytics-grid">
+          <section class="task-section chart-card">
+            <h3>Focus Hours (Last 7 Days)</h3>
+            <div class="bar-chart" id="weekly-chart"></div>
+          </section>
+          <section class="task-section chart-card">
+            <h3>Time Spent by Category</h3>
+            <div class="category-chart" id="category-chart"></div>
+          </section>
+        </div>
+      </div>
+
+      <!-- HISTORY VIEW -->
+      <div id="view-history" class="view">
+        <header><h2>Session History</h2></header>
+        <section class="task-section">
+          <h3>Completed Sessions</h3>
+          <div id="history-list" class="task-list">
+            <p class="empty-state">No sessions completed yet.</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- SETTINGS VIEW -->
+      <div id="view-settings" class="view">
+        <header><h2>Settings</h2></header>
+        
+        <section class="task-section">
+          <h3>Pomodoro Configuration</h3>
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label style="display:block; margin-bottom:5px; color:var(--text-muted);">Work Duration (minutes)</label>
+            <input type="number" id="set-work" value="25" style="width:200px; padding:10px; background:var(--bg-main); color:white; border:1px solid #4a4a55; border-radius:6px;">
+          </div>
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label style="display:block; margin-bottom:5px; color:var(--text-muted);">Short Break (minutes)</label>
+            <input type="number" id="set-short" value="5" style="width:200px; padding:10px; background:var(--bg-main); color:white; border:1px solid #4a4a55; border-radius:6px;">
+          </div>
+          <button id="btn-save-settings" class="btn-primary">Save Settings</button>
+          <span id="save-status" style="margin-left: 10px; color: #4caf50; display: none;">Saved!</span>
+        </section>
+
+        <section class="task-section">
+          <h3>Data Management</h3>
+          <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 14px;">Export your data to CSV files for backup or analysis in Excel.</p>
+          <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button id="btn-export-tasks" class="btn-primary" style="background-color: #4a4a55;">Export Tasks</button>
+            <button id="btn-export-sessions" class="btn-primary" style="background-color: #4a4a55;">Export Sessions</button>
+          </div>
+          
+          <hr style="border-color: #3a3a45; margin: 20px 0;">
+          
+          <p style="color: #f44336; margin-bottom: 15px; font-size: 14px;"><strong>Danger Zone:</strong> This will permanently delete all tasks, sessions, and reset settings.</p>
+          <!-- No onclick here, handled entirely in app.ts -->
+          <button id="btn-reset-data" class="btn-delete" style="padding: 10px 20px; font-size: 14px;">Reset Application Data</button>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
